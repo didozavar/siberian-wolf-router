@@ -1,8 +1,8 @@
 <?php
 
-include '../../vendor/autoload.php';
+namespace SiberianWolf\Router;
 
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \SiberianWolf\Router\Router
