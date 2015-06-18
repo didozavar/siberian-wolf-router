@@ -6,9 +6,9 @@
  * Time: 6:31 PM
  */
 
-namespace SiberianWolf\Router\Exceptions;
+namespace SiberianWolf\Router\Exception;
 
 
-class RouteNotFound extends \Exception {
+class RouteNotFoundException extends \Exception {
 
 }
