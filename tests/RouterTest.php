@@ -1,6 +1,6 @@
 <?php
 
-namespace SiberianWolf\Router;
+use \SiberianWolf\Router\Router;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 'handler' => 'IndexController@delete']
         ];
 
-        $this->router = new \SiberianWolf\Router\Router($routes);
+        $this->router = new Router($routes);
     }
 
     public function testRouterMatch()
@@ -48,12 +48,36 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \SiberianWolf\Router\Exceptions\MissingRouteDataException
+     * @expectedException \SiberianWolf\Router\Exception\InvalidMethodException
      */
-    public function testValidRoutesThrowExceptions()
+    public function testInvalidRouteMethodThrowExceptions()
     {
         $routes = [
             'user-delete' => ['route' => '/', 'handler' => 'IndexController@index']
+        ];
+
+        $this->router->setRoutes($routes);
+    }
+
+    /**
+     * @expectedException \SiberianWolf\Router\Exception\InvalidHandlerException
+     */
+    public function testInvalidRouteHandlerThrowExceptions()
+    {
+        $routes = [
+            'user-delete' => ['route' => '/', 'handler' => 'IndexControllerindex']
+        ];
+
+        $this->router->setRoutes($routes);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testInvalidRouteNameThrowExceptions()
+    {
+        $routes = [
+            'user-delete' => ['route' => '', 'handler' => 'IndexControllerindex']
         ];
 
         $this->router->setRoutes($routes);
