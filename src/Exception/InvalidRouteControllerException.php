@@ -2,13 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Dian
- * Date: 6/18/2015
- * Time: 10:06 PM
+ * Date: 6/20/2015
+ * Time: 8:04 PM
  */
 
 namespace SiberianWolf\Router\Exception;
 
 
-class InvalidHandlerException extends \Exception {
+class InvalidRouteControllerException extends \Exception
+{
 
 }

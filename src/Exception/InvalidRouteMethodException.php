@@ -9,6 +9,6 @@
 namespace SiberianWolf\Router\Exception;
 
 
-class InvalidMethodException extends \Exception {
+class InvalidRouteMethodException extends \Exception {
 
 }
