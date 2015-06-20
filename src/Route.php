@@ -1,23 +1,39 @@
 <?php
 
 namespace SiberianWolf\Router;
+
+use SiberianWolf\Router\Exception\InvalidRouteIdException;
+use SiberianWolf\Router\Exception\InvalidRouteMethodException;
+use SiberianWolf\Router\Exception\InvalidRouteActionException;
+use SiberianWolf\Router\Exception\InvalidRouteControllerException;
+
 /**
  * Just a value object that holds name, route, controller, action and params from current route
  * Class Route
  * @package SiberianWolf\Router
  */
-class Route implements Contract\RouteInterface
+class Route implements RouteInterface
 {
 
     /**
      * @var string
      */
-    private $name;
+    private $id;
 
     /**
      * @var string
      */
-    private $route;
+    private $uriPattern;
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var array
+     */
+    private $allowedMethods = ['get', 'post', 'put', 'delete', 'any'];
 
     /**
      * @var string
@@ -34,36 +50,75 @@ class Route implements Contract\RouteInterface
      */
     private $params = array();
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function __construct($id, $uriPattern, $method, $controller, $action, array $params = [])
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+        $this->setId($id);
+        $this->setUriPattern($uriPattern);
+        $this->setMethod($method);
+        $this->setController($controller);
+        $this->setAction($action);
+        $this->setParams($params);
     }
 
     /**
      * @return string
      */
-    public function getRoute()
+    public function getId()
     {
-        return $this->route;
+        return $this->id;
     }
 
     /**
-     * @param string $route
+     * @param string $id
+     * @throws InvalidRouteIdException
      */
-    public function setRoute($route)
+    public function setId($id)
     {
-        $this->route = $route;
+        $id = trim($id);
+        if (strlen($id) <= 0) {
+            throw new InvalidRouteIdException("Invalid route id: $id");
+        }
+
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriPattern()
+    {
+        return $this->uriPattern;
+    }
+
+    /**
+     * @param string $uriPattern
+     */
+    public function setUriPattern($uriPattern)
+    {
+        // TODO: implement validation someday
+        $this->uriPattern = $uriPattern;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+
+    /**
+     * @param $method
+     * @throws InvalidRouteMethodException
+     */
+    public function setMethod($method)
+    {
+        if (!in_array($method, $this->allowedMethods)) {
+            throw new InvalidRouteMethodException("Invalid route method: $method");
+        }
+
+        $this->method = $method;
     }
 
 
@@ -75,11 +130,17 @@ class Route implements Contract\RouteInterface
         return $this->controller;
     }
 
+
     /**
-     * @param string $controller
+     * @param $controller
+     * @throws InvalidRouteControllerException
      */
     public function setController($controller)
     {
+        if (strlen($controller) <= 0) {
+            throw new InvalidRouteControllerException();
+        }
+
         $this->controller = $controller;
     }
 
@@ -91,11 +152,12 @@ class Route implements Contract\RouteInterface
         return $this->action;
     }
 
-    /**
-     * @param string $action
-     */
     public function setAction($action)
     {
+        if (strlen($action) <= 0) {
+            throw new InvalidRouteActionException();
+        }
+
         $this->action = $action;
     }
 
@@ -121,17 +183,27 @@ class Route implements Contract\RouteInterface
      */
     public function setParams(array $params)
     {
-        $this->params = $params;
+        foreach ($params as $name => $value) {
+            $this->addParam($name, $value);
+        }
     }
 
     /**
-     * @param string $key
+     * @param string $name
      * @param string $value
      */
-    public function addParam($key, $value)
+    public function addParam($name, $value)
     {
-        $this->params[$key] = $value;
+        $this->params[$name] = $value;
     }
 
-
+    /**
+     * @param string $name
+     */
+    public function removeParam($name)
+    {
+        if (isset($this->params[$name])) {
+            unset($this->params[$name]);
+        }
+    }
 }
