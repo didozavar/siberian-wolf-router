@@ -1,6 +1,8 @@
 <?php
 
 use \SiberianWolf\Router\Router;
+use \SiberianWolf\Router\RouteCollection;
+use \SiberianWolf\Router\RouteFactory;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,33 +11,42 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     private $router;
 
+    private $routeFactory;
+
     public function setUp()
     {
         $routes = [
-            'home' => ['method' => 'get', 'route' => '/',
+            'home' => ['method' => 'get', 'uri' => '/',
                 'handler' => 'Home\Controller\IndexController@index'],
-            'test' => ['method' => 'any', 'route' => '/test',
+            'test' => ['method' => 'any', 'uri' => '/test',
                 'handler' => 'Home\Controller\IndexController@index'],
-            'user' => ['method' => 'get', 'route' => '/users',
+            'user' => ['method' => 'get', 'uri' => '/users',
                 'handler' => 'UserController@list'],
-            'user-edit' => ['method' => 'get', 'route' => '/user/{user_id}',
+            'user-edit' => ['method' => 'get', 'uri' => '/user/{user_id}',
                 'handler' => 'UserController@edit'],
-            'user-add' => ['method' => 'get', 'route' => '/user',
+            'user-add' => ['method' => 'get', 'uri' => '/user',
                 'handler' => 'IndexController@index'],
-            'user-delete' => ['method' => 'get', 'route' => '/user/delete/{user_id}',
+            'user-delete' => ['method' => 'get', 'uri' => '/user/delete/{user_id}',
                 'handler' => 'IndexController@delete']
         ];
 
-        $this->router = new Router($routes);
+        $routeCollection = new RouteCollection();
+        $this->routeFactory = new RouteFactory();
+
+        foreach ($routes as $id => $data) {
+            $routeCollection[$id] = $this->routeFactory->create($id, $data);
+        }
+
+        $this->router = new Router($routeCollection);
     }
 
     public function testRouterMatch()
     {
         $result = $this->router->match('get', '/');
-        $this->assertEquals('home', $result['name']);
+        $this->assertEquals('home', $result->getId());
 
         $result = $this->router->match('get', '/user/5');
-        $this->assertEquals('user-edit', $result['name']);
+        $this->assertEquals('user-edit', $result->getId());
     }
 
     public function testGenerateURI()
@@ -47,39 +58,4 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/user/1', $result);
     }
 
-    /**
-     * @expectedException \SiberianWolf\Router\Exception\InvalidMethodException
-     */
-    public function testInvalidRouteMethodThrowExceptions()
-    {
-        $routes = [
-            'user-delete' => ['route' => '/', 'handler' => 'IndexController@index']
-        ];
-
-        $this->router->setRoutes($routes);
-    }
-
-    /**
-     * @expectedException \SiberianWolf\Router\Exception\InvalidHandlerException
-     */
-    public function testInvalidRouteHandlerThrowExceptions()
-    {
-        $routes = [
-            'user-delete' => ['route' => '/', 'handler' => 'IndexControllerindex']
-        ];
-
-        $this->router->setRoutes($routes);
-    }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testInvalidRouteNameThrowExceptions()
-    {
-        $routes = [
-            'user-delete' => ['route' => '', 'handler' => 'IndexControllerindex']
-        ];
-
-        $this->router->setRoutes($routes);
-    }
 }
