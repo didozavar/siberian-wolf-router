@@ -8,13 +8,11 @@ use SiberianWolf\Router\Exception\InvalidRouteActionException;
 use SiberianWolf\Router\Exception\InvalidRouteControllerException;
 
 /**
- * Just a value object that holds name, route, controller, action and params from current route
- * Class Route
- * @package SiberianWolf\Router
+ * Validate route
+ * Class Route.
  */
 class Route implements RouteInterface
 {
-
     /**
      * @var string
      */
@@ -70,6 +68,7 @@ class Route implements RouteInterface
 
     /**
      * @param string $id
+     *
      * @throws InvalidRouteIdException
      */
     public function setId($id)
@@ -107,9 +106,9 @@ class Route implements RouteInterface
         return $this->method;
     }
 
-
     /**
      * @param $method
+     *
      * @throws InvalidRouteMethodException
      */
     public function setMethod($method)
@@ -121,7 +120,6 @@ class Route implements RouteInterface
         $this->method = $method;
     }
 
-
     /**
      * @return string
      */
@@ -130,9 +128,9 @@ class Route implements RouteInterface
         return $this->controller;
     }
 
-
     /**
      * @param $controller
+     *
      * @throws InvalidRouteControllerException
      */
     public function setController($controller)
@@ -171,6 +169,7 @@ class Route implements RouteInterface
 
     /**
      * @param string $key
+     *
      * @return mixed
      */
     public function getParam($key)

@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dian
- * Date: 6/21/2015
- * Time: 12:55 AM
- */
+
 namespace SiberianWolf\Router;
+
 use SiberianWolf\Router\Exception\InvalidRouteMethodException;
 use SiberianWolf\Router\Exception\InvalidRouteIdException;
 use SiberianWolf\Router\Exception\InvalidRouteControllerException;
-
 
 /**
  * Just a value object that holds name, route, controller, action and params from current route

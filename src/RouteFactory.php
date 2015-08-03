@@ -1,17 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dian
- * Date: 6/21/2015
- * Time: 12:32 AM
- */
 
 namespace SiberianWolf\Router;
 
-
+/**
+ *
+ * Class RouteFactory
+ * @package SiberianWolf\Router
+ */
 class RouteFactory
 {
-
+    /**
+     * @param $id
+     * @param array $data
+     * @return Route
+     */
     public function create($id, array $data)
     {
         $handlerParams = explode('@', $data['handler']);

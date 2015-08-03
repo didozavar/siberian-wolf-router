@@ -5,13 +5,12 @@ namespace SiberianWolf\Router;
 use \SiberianWolf\Router\Exception\RouteNotFoundException;
 
 /**
- * Router service that match http request from predefined routers config and generate request
+ * Router service that match http request from predefined routers config to controller and actions
  * Class Router
  * @package SiberianWolf\Router
  */
 class Router
 {
-
     /**
      * @var RouteCollection
      */
@@ -33,6 +32,9 @@ class Router
         $this->routeCollection = $routes;
     }
 
+    /**
+     * @return RouteCollection
+     */
     public function getRoutes()
     {
         return $this->routeCollection;
@@ -49,7 +51,6 @@ class Router
         $matchedRoute = null;
 
         foreach ($this->routeCollection as $route) {
-
             if ($route->getMethod() != $method && $route->getMethod() != 'any') {
                 continue;
             }
@@ -61,7 +62,6 @@ class Router
                 $matchedRoute = $route;
                 break;
             }
-
         }
 
         if (is_null($matchedRoute)) {
@@ -112,6 +112,5 @@ class Router
             $generatedRoute = str_replace('{' . $param['name'] . '}', $param['value'], $generatedRoute);
         }
         return $generatedRoute;
-
     }
 }

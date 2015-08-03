@@ -1,16 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dian
- * Date: 6/20/2015
- * Time: 8:52 PM
- */
 
 namespace SiberianWolf\Router;
 
-
-class RouteCollection implements \ArrayAccess, \IteratorAggregate   {
-
+/**
+ * Ensuring that every route in collection is from type Route
+ * Class RouteCollection
+ * @package SiberianWolf\Router
+ */
+class RouteCollection implements \ArrayAccess, \IteratorAggregate
+{
+    /**
+     * @var array $routes
+     */
     protected $routes;
 
     /**
@@ -37,6 +38,9 @@ class RouteCollection implements \ArrayAccess, \IteratorAggregate   {
      */
     public function offsetSet($offset, $value)
     {
+        if (!$value instanceof Route) {
+            throw new \InvalidArgumentException("Route collection accept only SiberianWolf\\Router\\Route object");
+        }
         $this->routes[$offset] = $value;
     }
 
@@ -55,6 +59,4 @@ class RouteCollection implements \ArrayAccess, \IteratorAggregate   {
     {
         return new \ArrayIterator($this->routes);
     }
-
-
 }

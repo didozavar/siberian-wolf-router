@@ -16,18 +16,36 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $routes = [
-            'home' => ['method' => 'get', 'uri' => '/',
-                'handler' => 'Home\Controller\IndexController@index'],
-            'test' => ['method' => 'any', 'uri' => '/test',
-                'handler' => 'Home\Controller\IndexController@index'],
-            'user' => ['method' => 'get', 'uri' => '/users',
-                'handler' => 'UserController@list'],
-            'user-edit' => ['method' => 'get', 'uri' => '/user/{user_id}',
-                'handler' => 'UserController@edit'],
-            'user-add' => ['method' => 'get', 'uri' => '/user',
-                'handler' => 'IndexController@index'],
-            'user-delete' => ['method' => 'get', 'uri' => '/user/delete/{user_id}',
-                'handler' => 'IndexController@delete']
+            'home' => [
+                'method' => 'get',
+                'uri' => '/',
+                'handler' => 'Home\Controller\IndexController@index'
+            ],
+            'test' => [
+                'method' => 'any',
+                'uri' => '/test',
+                'handler' => 'Home\Controller\IndexController@index'
+            ],
+            'user' => [
+                'method' => 'get',
+                'uri' => '/users',
+                'handler' => 'UserController@list'
+            ],
+            'user-edit' => [
+                'method' => 'get',
+                'uri' => '/user/{user_id}',
+                'handler' => 'UserController@edit'
+            ],
+            'user-add' => [
+                'method' => 'get',
+                'uri' => '/user',
+                'handler' => 'IndexController@index'
+            ],
+            'user-delete' => [
+                'method' => 'get',
+                'uri' => '/user/delete/{user_id}',
+                'handler' => 'IndexController@delete'
+            ]
         ];
 
         $routeCollection = new RouteCollection();
