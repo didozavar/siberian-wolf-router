@@ -6,7 +6,7 @@ Router library
 Version: 0.5.1
 
 How to use it:
-
+```
 $routes = [
             'home' => ['method' => 'get','uri' => '/','handler' => 'Home\Controller\IndexController@index']
 ];
@@ -22,3 +22,4 @@ $router = new Router($routes);
 
 //find or throw exception not found.
 $router->match('home/test/user/12');
+```
