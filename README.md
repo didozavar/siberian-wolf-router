@@ -12,7 +12,8 @@ $routes = [
             'name' => 'home',
             'method' => 'get',
             'uri' => '/',
-            'handler' => 'Home\Controller\IndexController@index']
+            'handler' => 'Home\Controller\IndexController@index'
+            ]
 ];
 
 $routes = new RouteCollection();
