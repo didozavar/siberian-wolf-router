@@ -3,22 +3,21 @@
 namespace SiberianWolf\Router;
 
 /**
- *
- * Class RouteFactory
- * @package SiberianWolf\Router
+ * Class RouteFactory.
  */
 class RouteFactory
 {
     /**
-     * @param $id
      * @param array $data
+     *
      * @return Route
      */
-    public function create($id, array $data)
+    public function create($data)
     {
         $handlerParams = explode('@', $data['handler']);
-        $controller = $handlerParams[0];
-        $action = $handlerParams[1];
-        return new Route($id, $data['uri'], $data['method'], $controller, $action);
+        $controller = isset($handlerParams[0]) ? $handlerParams[0] : '';
+        $action = isset($handlerParams[1]) ? $handlerParams[1] : '';
+
+        return new Route($data['name'], $data['uri'], $data['method'], $controller, $action);
     }
 }
