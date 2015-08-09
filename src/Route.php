@@ -2,10 +2,11 @@
 
 namespace SiberianWolf\Router;
 
-use SiberianWolf\Router\Exception\InvalidRouteIdException;
+use SiberianWolf\Router\Exception\InvalidRouteNameException;
 use SiberianWolf\Router\Exception\InvalidRouteMethodException;
 use SiberianWolf\Router\Exception\InvalidRouteActionException;
 use SiberianWolf\Router\Exception\InvalidRouteControllerException;
+use SiberianWolf\Router\Exception\InvalidRouteUriPatternException;
 
 /**
  * Validate route
@@ -16,7 +17,7 @@ class Route implements RouteInterface
     /**
      * @var string
      */
-    private $id;
+    private $name;
 
     /**
      * @var string
@@ -48,9 +49,9 @@ class Route implements RouteInterface
      */
     private $params = array();
 
-    public function __construct($id, $uriPattern, $method, $controller, $action, array $params = [])
+    public function __construct($name, $uriPattern, $method, $controller, $action, array $params = [])
     {
-        $this->setId($id);
+        $this->setName($name);
         $this->setUriPattern($uriPattern);
         $this->setMethod($method);
         $this->setController($controller);
@@ -61,24 +62,24 @@ class Route implements RouteInterface
     /**
      * @return string
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
     }
 
     /**
-     * @param string $id
+     * @param $name
      *
-     * @throws InvalidRouteIdException
+     * @throws InvalidRouteNameException
      */
-    public function setId($id)
+    public function setName($name)
     {
-        $id = trim($id);
-        if (strlen($id) <= 0) {
-            throw new InvalidRouteIdException("Invalid route id: $id");
+        $name = trim($name);
+        if (strlen($name) <= 0) {
+            throw new InvalidRouteNameException("Invalid route name: $name");
         }
 
-        $this->id = $id;
+        $this->name = $name;
     }
 
     /**
@@ -91,10 +92,16 @@ class Route implements RouteInterface
 
     /**
      * @param string $uriPattern
+     *
+     * @throws InvalidRouteUriPatternException
      */
     public function setUriPattern($uriPattern)
     {
-        // TODO: implement validation someday
+        $uriPattern = trim($uriPattern);
+        if (strlen($uriPattern) <= 0) {
+            throw new InvalidRouteUriPatternException("Invalid route UriPattern: $uriPattern");
+        }
+
         $this->uriPattern = $uriPattern;
     }
 
@@ -136,7 +143,7 @@ class Route implements RouteInterface
     public function setController($controller)
     {
         if (strlen($controller) <= 0) {
-            throw new InvalidRouteControllerException();
+            throw new InvalidRouteControllerException("Invalid route controller: $controller");
         }
 
         $this->controller = $controller;
@@ -150,10 +157,15 @@ class Route implements RouteInterface
         return $this->action;
     }
 
+    /**
+     * @param $action
+     *
+     * @throws InvalidRouteActionException
+     */
     public function setAction($action)
     {
         if (strlen($action) <= 0) {
-            throw new InvalidRouteActionException();
+            throw new InvalidRouteActionException("Invalid route action: $action");
         }
 
         $this->action = $action;
@@ -174,7 +186,11 @@ class Route implements RouteInterface
      */
     public function getParam($key)
     {
-        return (isset($this->params[$key])) ? $this->params[$key] : null;
+        if (isset($this->params[$key])) {
+            return $this->params[$key];
+        }
+
+        return;
     }
 
     /**
