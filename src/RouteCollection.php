@@ -4,18 +4,18 @@ namespace SiberianWolf\Router;
 
 /**
  * Ensuring that every route in collection is from type Route
- * Class RouteCollection
- * @package SiberianWolf\Router
+ * Class RouteCollection.
  */
 class RouteCollection implements \ArrayAccess, \IteratorAggregate
 {
     /**
-     * @var array $routes
+     * @var array
      */
     protected $routes;
 
     /**
      * @param string $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
@@ -25,6 +25,7 @@ class RouteCollection implements \ArrayAccess, \IteratorAggregate
 
     /**
      * @param string $offset
+     *
      * @return RouteInterface
      */
     public function offsetGet($offset)
@@ -33,14 +34,15 @@ class RouteCollection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @param string $offset
+     * @param string         $offset
      * @param RouteInterface $value
      */
     public function offsetSet($offset, $value)
     {
         if (!$value instanceof Route) {
-            throw new \InvalidArgumentException("Route collection accept only SiberianWolf\\Router\\Route object");
+            throw new \InvalidArgumentException('Route collection accept only SiberianWolf\\Router\\Route object');
         }
+
         $this->routes[$offset] = $value;
     }
 
