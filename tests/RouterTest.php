@@ -16,43 +16,55 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $routes = [
-            'home' => [
+            [
+                'name' => 'home',
                 'method' => 'get',
                 'uri' => '/',
-                'handler' => 'Home\Controller\IndexController@index'
+                'handler' => 'Home\Controller\IndexController@index',
             ],
-            'test' => [
+            [
+                'name' => 'test',
                 'method' => 'any',
                 'uri' => '/test',
-                'handler' => 'Home\Controller\IndexController@index'
+                'handler' => 'Home\Controller\IndexController@index',
             ],
-            'user' => [
+            [
+                'name' => 'user',
                 'method' => 'get',
                 'uri' => '/users',
-                'handler' => 'UserController@list'
+                'handler' => 'UserController@list',
             ],
-            'user-edit' => [
+            [
+                'name' => 'user-edit',
                 'method' => 'get',
                 'uri' => '/user/{user_id}',
-                'handler' => 'UserController@edit'
+                'handler' => 'UserController@edit',
             ],
-            'user-add' => [
+            [
+                'name' => 'user-edit-long',
+                'method' => 'get',
+                'uri' => '/user/{user_id}/pic/{user_pic_id}',
+                'handler' => 'UserController@editLong',
+            ],
+            [
+                'name' => 'user-add',
                 'method' => 'get',
                 'uri' => '/user',
-                'handler' => 'IndexController@index'
+                'handler' => 'IndexController@index',
             ],
-            'user-delete' => [
+            [
+                'name' => 'user-delete',
                 'method' => 'get',
                 'uri' => '/user/delete/{user_id}',
-                'handler' => 'IndexController@delete'
-            ]
+                'handler' => 'IndexController@delete',
+            ],
         ];
 
         $routeCollection = new RouteCollection();
         $this->routeFactory = new RouteFactory();
 
-        foreach ($routes as $id => $data) {
-            $routeCollection[$id] = $this->routeFactory->create($id, $data);
+        foreach ($routes as $data) {
+            $routeCollection[$data['name']] = $this->routeFactory->create($data);
         }
 
         $this->router = new Router($routeCollection);
@@ -61,19 +73,23 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRouterMatch()
     {
         $result = $this->router->match('get', '/');
-        $this->assertEquals('home', $result->getId());
+        $this->assertEquals('home', $result->getName());
 
         $result = $this->router->match('get', '/user/5');
-        $this->assertEquals('user-edit', $result->getId());
+        $this->assertEquals('user-edit', $result->getName());
     }
 
     public function testGenerateURI()
     {
-        $result = $this->router->createURI('user-edit', [['name' => 'user_id', 'value' => 1]]);
+        //user-edit-long
+
+        $result = $this->router->createURI('user-edit', ['user_id' => 1]);
         $this->assertEquals('/user/1', $result);
 
-        $result = $this->router->createURI('user-edit', [['name' => 'user_id', 'value' => 1]]);
+        $result = $this->router->createURI('user-edit', ['user_id' => 1]);
         $this->assertEquals('/user/1', $result);
+
+        $result = $this->router->createURI('user-edit-long', ['user_id' => 1, 'user_pic_id' => 2]);
+        $this->assertEquals('/user/1/pic/2', $result);
     }
-
 }
